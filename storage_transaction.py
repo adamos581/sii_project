@@ -10,7 +10,7 @@ class StorageTransaction:
         self.url = url
         self.transactions = None
         self.count_transaction = count
-        self.counter_delta_trans = count//2 - 10
+        self.counter_delta_trans = 20
         self.filename= filename
         self.read_transaction_from_csv()
         self.download_first_trades()
@@ -65,12 +65,13 @@ class StorageTransaction:
                 step_factor = 1.0
             time_delta = self.count_time_delta(narest_date_index, iterate_direction)
             index = self.get_probable_index(date, narest_date_index, time_delta, step_factor)
+            print(index)
             for i in range(2):
                 transaction = self.get_transactions_by_index(index + i * self.count_transaction//2)
                 self.procces_downloaded_data(transaction)
 
             transaction = self.check_date(date)
-            step_factor -= 0.05
+            step_factor -= 0.1
         print('\n')
         return transaction
 
@@ -86,6 +87,9 @@ class StorageTransaction:
         nearest_date = self.transactions.loc[nearest_date_index]['date']
 
         goal_index = (goal_date - nearest_date)/abs(time_delta) * step_factor
+        print(nearest_date_index)
+        print(nearest_date_index + goal_index)
+
         index = max(0, int(nearest_date_index + goal_index - self.count_transaction/2))
         return index
 
@@ -126,7 +130,7 @@ class StorageTransaction:
 
         lower_max_index = lower['date'].idxmax()
         grater_min_index = grater['date'].idxmin()
-        return grater_min_index - lower_max_index == 1
+        return grater_min_index - lower_max_index < 5
 
     def find_nearest_date(self, date):
         """This function find nearest date to date which user want to get
