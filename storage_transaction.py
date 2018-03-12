@@ -65,7 +65,6 @@ class StorageTransaction:
                 step_factor = 1.0
             time_delta = self.count_time_delta(narest_date_index, iterate_direction)
             index = self.get_probable_index(date, narest_date_index, time_delta, step_factor)
-            print(index)
             for i in range(2):
                 transaction = self.get_transactions_by_index(index + i * self.count_transaction//2)
                 self.procces_downloaded_data(transaction)
@@ -87,8 +86,6 @@ class StorageTransaction:
         nearest_date = self.transactions.loc[nearest_date_index]['date']
 
         goal_index = (goal_date - nearest_date)/abs(time_delta) * step_factor
-        print(nearest_date_index)
-        print(nearest_date_index + goal_index)
 
         index = max(0, int(nearest_date_index + goal_index - self.count_transaction/2))
         return index
