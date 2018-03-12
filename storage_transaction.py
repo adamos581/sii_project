@@ -197,20 +197,20 @@ class StorageTransaction:
 
     def read_transaction_from_csv(self):
         filename = '{}.csv'.format(self.filename)
-        # try:
-        data = pd.read_csv(filename)
-        data['date'] = data['date'].apply(lambda x: datetime.datetime.strptime(x, '%Y-%m-%d %H:%M:%S'))
-        data['tid'] = data['tid'].apply(lambda x: int(x))
-        data.set_index('tid', inplace=True)
-        self.transactions = data
-        # except Exception:
-        #     pass
+        try:
+            data = pd.read_csv(filename)
+            data['date'] = data['date'].apply(lambda x: datetime.datetime.strptime(x, '%Y-%m-%d %H:%M:%S'))
+            data['tid'] = data['tid'].apply(lambda x: int(x))
+            data.set_index('tid', inplace=True)
+            self.transactions = data
+        except Exception:
+            pass
 
     def save_transactions(self,):
         self.transactions.to_csv('{}.csv'.format(self.filename))
 
 if __name__ == "__main__":
 
-    x = StorageTransaction("https://bitbay.net/API/Public/BTCPLN/trades.json")
+    x = StorageTransaction("https://bitbay.net/API/Public/BTCPLN/trades.json", 'bitbay')
     s = x.gradient_search_transactions(datetime.datetime(2015, 3, 10, 2, 4))
 
